@@ -55,7 +55,8 @@ TEST_CASE( "parse_headers: HEAD method", "[parser][methods]" ) {
 
 TEST_CASE( "parse_headers: very long path", "[parser][edge]" ) {
     std::string long_path( 2000, 'a' );
-    auto req = parse_headers( "GET /" + long_path + " HTTP/1.1\r\nHost: x\r\n\r\n" );
+    std::string raw = "GET /" + long_path + " HTTP/1.1\r\nHost: x\r\n\r\n";
+    auto req = parse_headers( raw );
     CHECK( req.method == "GET" );
     CHECK( req.path.size() == 2001 );
 }
