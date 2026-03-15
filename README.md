@@ -33,13 +33,15 @@ $ curl http://localhost:8080/users/42
 
 ## Why Lundi?
 
-One `#include`, no Boost, no external dependencies, 1.4M req/s, C++20 coroutines give you async I/O that reads like synchronous code.
+One `#include`, no Boost, no external dependencies. C++20 coroutines give you async I/O that reads like synchronous code — Express.js syntax, C++ performance.
 
-| Framework | Req/s | Latency (avg) | Language |
-|-----------|-------|---------------|----------|
-| **Lundi** | **1.4M** | **1.86ms** | C++20 |
-| Express.js | 17,630 | 49ms | Node.js |
-| FastAPI (uvicorn) | 8,166 | 49ms | Python |
+| Framework | Req/s | Latency (avg) | Model | Language |
+|-----------|-------|---------------|-------|----------|
+| **Lundi** | **1,426,106** | **238µs** | C++20 coroutines | C++20 |
+| Crow | 1,248,618 | 304µs | Callbacks | C++14 |
+| Express.js | 18,326 | 37.96ms | Event loop | Node.js |
+
+> Benchmarked on Intel i7-13700 (24 cores), 8 threads, 400 connections, 10s duration using [wrk](https://github.com/wg/wrk).
 
 ## Installation
 
