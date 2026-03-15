@@ -1,5 +1,5 @@
 #include <lundi/engine/date_cache.hpp>
-
+#include <lundi/core.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 #include <cstring>
@@ -7,6 +7,7 @@
 #include <thread>
 
 using namespace lundi::engine;
+using namespace lundi::detail;
 
 TEST_CASE( "date_cache: returns 29 bytes", "[engine][date]" ) {
     date_cache dc;
@@ -50,9 +51,10 @@ TEST_CASE( "date_cache: global singleton returns valid date", "[engine][date]" )
 TEST_CASE( "date_cache: concurrent reads are safe", "[engine][date]" ) {
     auto& dc = global_date_cache();
     dc.update();
+    
 
     // Multiple threads reading simultaneously shouldn't crash
-    std::vector< std::jthread > threads;
+    std::vector< joining_thread > threads;
     std::atomic< int > success{ 0 };
     for( int i = 0; i < 8; ++i )
     {

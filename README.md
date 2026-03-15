@@ -2,6 +2,8 @@
 
 > A blazing-fast, header-only, asynchronous C++20 web framework. Named after the Icelandic puffin.
 
+[![CI](https://github.com/olafurjohannsson/lundicpp/actions/workflows/ci.yml/badge.svg)](https://github.com/olafurjohannsson/lundicpp/actions/workflows/ci.yml)
+
 ```cpp
 #include <lundi.hpp>
 

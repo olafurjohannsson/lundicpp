@@ -15,6 +15,7 @@
 #include <unordered_map>
 #include <variant>
 #include <vector>
+#include <thread>
 
 // Engine components for fast serialization
 #include "engine/buffer.hpp"
@@ -887,6 +888,30 @@ struct response {
 
 namespace detail
 {
+
+
+/// @brief RAII thread wrapper that joins on destruction, matching std::jthread behaviour.
+/// Used instead of std::jthread for Apple Clang compatibility.
+class joining_thread
+{
+public:
+    template< typename F >
+    explicit joining_thread( F&& f ) : thread_( std::forward< F >( f ) ) {}
+
+    joining_thread( joining_thread&& ) = default;
+    joining_thread& operator=( joining_thread&& ) = default;
+
+    joining_thread( const joining_thread& ) = delete;
+    joining_thread& operator=( const joining_thread& ) = delete;
+
+    ~joining_thread()
+    {
+        if( thread_.joinable() ) thread_.join();
+    }
+
+private:
+    std::thread thread_;
+};
 
 inline request parse_headers( std::string_view header_data )
 {

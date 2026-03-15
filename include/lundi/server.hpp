@@ -31,7 +31,6 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include <thread>
 #include <unordered_map>
 #include <variant>
 #include <vector>
@@ -355,7 +354,7 @@ public:
             std::cout << "[lundi] listening on " << opts.address << ":" << opts.port << " ("
             << opts.threads << " worker thread" << ( opts.threads > 1 ? "s" : "" ) << ")\n";
 
-            std::vector< std::jthread > pool;
+            std::vector< detail::joining_thread > pool;
             pool.reserve( opts.threads );
             for( auto& w : workers )
             {

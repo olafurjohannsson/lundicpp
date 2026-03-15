@@ -19,6 +19,37 @@
 
 #include "core.hpp"
 
+#ifdef _WIN32
+#include <iomanip>
+#include <sstream>
+
+namespace lundi::detail::win32
+{
+    inline std::tm* gmtime_r(const std::time_t* timep, std::tm* result)
+    {
+        gmtime_s(result, timep); // MSVC has reversed arg order
+        return result;
+    }
+
+    inline std::time_t timegm(std::tm* tm)
+    {
+        return _mkgmtime(tm); // MSVC equivalent
+    }
+
+    // strptime doesn't exist on MSVC for now we parse HTTP date via stringstream
+    inline char* strptime(const char* s, const char* /*fmt*/, std::tm* tm)
+    {
+        std::istringstream ss(s);
+        ss >> std::get_time(tm, "%a, %d %b %Y %H:%M:%S");
+        return ss.fail() ? nullptr : const_cast<char*>(s) + ss.tellg();
+    }
+}
+
+using lundi::detail::win32::gmtime_r;
+using lundi::detail::win32::timegm;
+using lundi::detail::win32::strptime;
+#endif
+
 namespace lundi
 {
 
@@ -280,7 +311,7 @@ public:
                       "serve_static: '" + directory + "' is not a directory" );
         }
 
-        std::string dir_str = canonical.string();
+        std::string dir_str = canonical.generic_string();
         if( !dir_str.empty() && dir_str.back() != '/' )
         {
             dir_str += '/';
@@ -396,7 +427,7 @@ private:
         {
             return std::nullopt;
         }
-        auto canonical_str = canonical.string();
+        auto canonical_str = canonical.generic_string();
         if( canonical_str.find( mount.directory ) != 0 )
         {
             return std::nullopt;  // symlink or canonical path escapes mount

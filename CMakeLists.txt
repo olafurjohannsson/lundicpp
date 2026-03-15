@@ -32,6 +32,14 @@ target_compile_definitions(lundi INTERFACE
     ASIO_NO_DEPRECATED
 )
 
+if(WIN32)
+    target_compile_definitions(lundi INTERFACE
+        _WIN32_WINNT=0x0A00
+        WIN32_LEAN_AND_MEAN
+        NOMINMAX
+    )
+endif()
+
 # target_compile_options(${PROJECT_NAME} INTERFACE
 #     -Wall -Wextra -Wpedantic -Wshadow -Wconversion
 #     -Wnon-virtual-dtor -Wold-style-cast -Wcast-align
