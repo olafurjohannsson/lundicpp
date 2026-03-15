@@ -20,7 +20,7 @@ jobs:
 
       - name: Build and Test (Linux/macOS)
         if: runner.os != 'Windows'
-        run: bash scripts/build.sh
+        run: bash scripts/run-tests.sh
 
       - name: Build and Test (Windows)
         if: runner.os == 'Windows'
