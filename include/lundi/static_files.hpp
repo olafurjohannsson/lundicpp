@@ -311,7 +311,7 @@ public:
                       "serve_static: '" + directory + "' is not a directory" );
         }
 
-        std::string dir_str = canonical.string();
+        std::string dir_str = canonical.generic_string();
         if( !dir_str.empty() && dir_str.back() != '/' )
         {
             dir_str += '/';
@@ -427,7 +427,7 @@ private:
         {
             return std::nullopt;
         }
-        auto canonical_str = canonical.string();
+        auto canonical_str = canonical.generic_string();
         if( canonical_str.find( mount.directory ) != 0 )
         {
             return std::nullopt;  // symlink or canonical path escapes mount
